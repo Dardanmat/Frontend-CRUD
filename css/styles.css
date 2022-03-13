@@ -20,6 +20,41 @@
     }
 }
 
+.btn-delete{
+  position: relative;
+  transition: 100ms ease-out;
+}
+
+.btn-delete:hover,
+.btn-delete:active{
+  color: transparent;
+}
+
+.btn-delete:active{
+  transform: scale(110%);
+}
+
+.btn-delete::before{
+  content: "\2715";
+  font-weight: bolder;
+  position: absolute;
+  font-size: 24px;
+  color:white;
+  top: -30%;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0%;
+
+  transition: 100ms ease-out;
+}
+
+.btn-delete:hover::before,
+.btn-delete:active::before{
+  opacity: 100%;
+  top: 0%;
+}
+
 .levitate{
   position: relative;
   transition: 300ms ease-out;

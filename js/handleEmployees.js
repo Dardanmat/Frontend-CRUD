@@ -72,7 +72,7 @@ function displayEmployees() {
         }
         rows += "<td>";
         rows += "<button class='m-1 btn btn-primary' onclick='modifyEmployee(" + value.id + ")' id='change-" + value.id + "'>Modifica</button>";
-        rows += "<button class='m-1 btn btn-danger' onclick='deleteEmployee(" + value.id + ")'>Licenzia</button>";
+        rows += "<button class='m-1 btn btn-danger btn-delete' onclick='deleteEmployee(" + value.id + ")'>Licenzia</button>";
         rows += "</td>";
         rows += "</tr>";
     });
