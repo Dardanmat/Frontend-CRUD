@@ -1,4 +1,4 @@
-$(window).on("load", function(){
+$(window).on("load", function () {
     loadFirstPage();
 });
 
@@ -7,7 +7,7 @@ var pageData;
 var data;
 var totPages;
 
-function defaultInstructions(values){
+function defaultInstructions(values) {
     data = values._embedded.employees;
     pageData = values;
     totPages = values.page.totalPages;
@@ -16,48 +16,48 @@ function defaultInstructions(values){
     checkPageButtons(values.page.number);
 }
 
-function loadFirstPage(){
-    $.get(firstPage, function(values,status){
+function loadFirstPage() {
+    $.get(firstPage, function (values, status) {
         defaultInstructions(values);
     });
 }
-function loadPreviousPage(){
-    $.get(pageData._links.prev.href, function(values,status){
+function loadPreviousPage() {
+    $.get(pageData._links.prev.href, function (values, status) {
         defaultInstructions(values);
     });
 }
-function loadNextPage(){
-    $.get(pageData._links.next.href, function(values,status){
+function loadNextPage() {
+    $.get(pageData._links.next.href, function (values, status) {
         defaultInstructions(values);
     });
 }
-function loadLastPage(){
-    $.get(pageData._links.last.href, function(values,status){
+function loadLastPage() {
+    $.get(pageData._links.last.href, function (values, status) {
         defaultInstructions(values);
     });
 }
 
-var attributes =   ["id",
-                    "firstName",
-                    "lastName", //<-- 2 
-                    "birthDate",
-                    "hireDate",
-                    "gender"];
-function displayEmployees(){
+var attributes = ["id",
+    "firstName",
+    "lastName", //<-- 2 
+    "birthDate",
+    "hireDate",
+    "gender"];
+function displayEmployees() {
     var rows = "";
     showLess();
 
-    $.each(data, function(key, value){
+    $.each(data, function (key, value) {
         rows += "<tr>";
         let extraClass = "d-none extra-info";
         let cls = "";
 
-        for(let i = 0; i < attributes.length; i++){
-            if(i > 2) cls = extraClass; //2 --> the position limit to show
-            rows += "<td class='"+ cls+"' id='" + attributes[i] + "-" + value.id + "'>";
+        for (let i = 0; i < attributes.length; i++) {
+            if (i > 2) cls = extraClass; //2 --> the position limit to show
+            rows += "<td class='" + cls + "' id='" + attributes[i] + "-" + value.id + "'>";
             rows += "<span id='text-" + attributes[i] + "-" + value.id + "' class=''>" + value[attributes[i]] + "</span>";
-            
-            switch(i){
+
+            switch (i) {
                 case 1: case 2: case 5:
                     rows += "<input type='text' id='input-" + attributes[i] + "-" + value.id + "' placeholder='" + value[attributes[i]] + "' class='d-none'>";
                     break;
@@ -72,7 +72,7 @@ function displayEmployees(){
         }
         rows += "<td>";
         rows += "<button class='m-1 btn btn-primary' onclick='modifyEmployee(" + value.id + ")' id='change-" + value.id + "'>Modifica</button>";
-        rows += "<button class='m-1 btn btn-danger spin' onclick='deleteEmployee(" + value.id + ")'>Licenzia</button>";
+        rows += "<button class='m-1 btn btn-danger' onclick='deleteEmployee(" + value.id + ")'>Licenzia</button>";
         rows += "</td>";
         rows += "</tr>";
     });
@@ -82,50 +82,50 @@ function displayEmployees(){
 
 
 var open = 0;
-function modifyEmployee(id){
+function modifyEmployee(id) {
     showMore();
     open++;
     //change the button
-    $("#change-"+id).removeClass("btn-primary");
-    $("#change-"+id).addClass("btn-success");
-    $("#change-"+id).text("Salva");
-    $("#change-"+id).attr("onclick", "saveChanges(" + id + ")");
+    $("#change-" + id).removeClass("btn-primary");
+    $("#change-" + id).addClass("btn-success");
+    $("#change-" + id).text("Salva");
+    $("#change-" + id).attr("onclick", "saveChanges(" + id + ")");
 
     //show inputs
-    for(let i = 1; i < attributes.length; i++){ //there is no id hidden input
-        $("#input-"+attributes[i]+"-"+id).removeClass("d-none");
-        $("#text-"+attributes[i]+"-"+id).addClass("d-none");
+    for (let i = 1; i < attributes.length; i++) { //there is no id hidden input
+        $("#input-" + attributes[i] + "-" + id).removeClass("d-none");
+        $("#text-" + attributes[i] + "-" + id).addClass("d-none");
     }
 
 }
 
-function saveChanges(id){
+function saveChanges(id) {
     open--;
-    if(open === 0) showLess();
+    if (open === 0) showLess();
 
     //change the button
-    $("#change-"+id).removeClass("btn-success");
-    $("#change-"+id).addClass("btn-primary");
-    $("#change-"+id).text("Modifica");
-    $("#change-"+id).attr("onclick", "modifyEmployee(" + id + ")");
+    $("#change-" + id).removeClass("btn-success");
+    $("#change-" + id).addClass("btn-primary");
+    $("#change-" + id).text("Modifica");
+    $("#change-" + id).attr("onclick", "modifyEmployee(" + id + ")");
 
     let newAttributes = [];
 
-    for(let i = 1; i < attributes.length; i++){ //there is no id hidden input
-        $("#input-"+attributes[i]+"-"+id).addClass("d-none");
-        $("#text-"+attributes[i]+"-"+id).removeClass("d-none");
+    for (let i = 1; i < attributes.length; i++) { //there is no id hidden input
+        $("#input-" + attributes[i] + "-" + id).addClass("d-none");
+        $("#text-" + attributes[i] + "-" + id).removeClass("d-none");
 
-        switch(i){ //reset text inputs & savcs them in newAttributes
+        switch (i) { //reset text inputs & savcs them in newAttributes
             case 1: case 2: case 5:
-                if($("#input-"+attributes[i]+"-"+id).val().trim() == "") { //check if input is empty
-                    newAttributes.push($("#text-"+attributes[i]+"-"+id).text()); 
+                if ($("#input-" + attributes[i] + "-" + id).val().trim() == "") { //check if input is empty
+                    newAttributes.push($("#text-" + attributes[i] + "-" + id).text());
                 }
                 else {
-                    newAttributes.push($("#input-"+attributes[i]+"-"+id).val()); 
+                    newAttributes.push($("#input-" + attributes[i] + "-" + id).val());
                 }
                 break;
             case 3: case 4:
-                newAttributes.push($("#input-"+attributes[i]+"-"+id).val());
+                newAttributes.push($("#input-" + attributes[i] + "-" + id).val());
                 break;
         }
     }
@@ -140,58 +140,58 @@ function saveChanges(id){
     changeEmployeeData(payload, id);
 }
 
-function changeEmployeeData(payload, id){
-    
+function changeEmployeeData(payload, id) {
+
     $.ajax({
         method: "PUT",
         url: firstPage + "/" + id,
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify(payload),
-        success: function(){
-            
+        success: function () {
+
             //change the text only when it has changed in the database
-            for(let i = 1; i < attributes.length; i++){ 
-                switch(i){
+            for (let i = 1; i < attributes.length; i++) {
+                switch (i) {
                     case 1: case 2: case 5:
-                        if($("#input-"+attributes[i]+"-"+id).val().trim() != "") { //check if input isn't empty
-                            $("#text-"+attributes[i]+"-"+id).text($("#input-"+attributes[i]+"-"+id).val()); //set cell text to new value
-                            $("#input-"+attributes[i]+"-"+id).prop("placeholder", $("#input-"+attributes[i]+"-"+id).val()); //set new placeholder value
+                        if ($("#input-" + attributes[i] + "-" + id).val().trim() != "") { //check if input isn't empty
+                            $("#text-" + attributes[i] + "-" + id).text($("#input-" + attributes[i] + "-" + id).val()); //set cell text to new value
+                            $("#input-" + attributes[i] + "-" + id).prop("placeholder", $("#input-" + attributes[i] + "-" + id).val()); //set new placeholder value
                         }
-                        $("#input-"+attributes[i]+"-"+id).val(""); //empty input
+                        $("#input-" + attributes[i] + "-" + id).val(""); //empty input
                         break;
                     case 3: case 4:
-                        $("#text-"+attributes[i]+"-"+id).text($("#input-"+attributes[i]+"-"+id).val()); //set cell date text to new value
+                        $("#text-" + attributes[i] + "-" + id).text($("#input-" + attributes[i] + "-" + id).val()); //set cell date text to new value
                         break;
                 }
             }
 
         },
-        error: function(jqXHR, textStatus, errorThrown){
+        error: function (jqXHR, textStatus, errorThrown) {
             alert("Errore, le modifiche non sono state applicate");
             console.log("Operazione fallita", jqXHR, textStatus, errorThrown);
         }
     });
 }
 
-function saveEmployee(){
+function saveEmployee() {
 
     let gender = "M";
-    if($("#radio-female").prop("checked")){
+    if ($("#radio-female").prop("checked")) {
         gender = "F";
     }
 
     addEmployee(
-    $("#input-name").val().trim(),
-    $("#input-lastname").val().trim(),
-    $("#input-birthdate").val(),
-    $("#input-hiredate").val(),
-    gender);
+        $("#input-name").val().trim(),
+        $("#input-lastname").val().trim(),
+        $("#input-birthdate").val(),
+        $("#input-hiredate").val(),
+        gender);
 
     resetModalInputs();
 }
 
-function resetModalInputs(){
+function resetModalInputs() {
     $("#input-name").val("");
     $("#input-lastname").val("");
     $("#input-birthdate").val("");
@@ -200,7 +200,7 @@ function resetModalInputs(){
     $("#radio-female").prop("checked", false);
 }
 
-function addEmployee(name, lastname, birthdate, hiredate, gender){
+function addEmployee(name, lastname, birthdate, hiredate, gender) {
     let payload = {
         "firstName": name,
         "lastName": lastname,
@@ -218,70 +218,78 @@ function addEmployee(name, lastname, birthdate, hiredate, gender){
     });
 }
 
-function reloadCurrentPage(){
-    setTimeout(function(){ //Il server impiega più tempo a salvare il nuovo utente che a rimandare la nuova pagina
-        $.get("http://localhost:8080/employees?page=" + pageData.page.number + "&size=20", function(values,status){
+function reloadCurrentPage() {
+    setTimeout(function () { //Il server impiega più tempo a salvare il nuovo utente che a rimandare la nuova pagina
+        $.get("http://localhost:8080/employees?page=" + pageData.page.number + "&size=20", function (values, status) {
             defaultInstructions(values);
         });
     }, 50);
 }
 
-function deleteEmployee(id){
+function deleteEmployee(id) {
     $.ajax({
         url: firstPage + "/" + id,
         type: 'DELETE',
-        success: function(result) {
-            $("#id-"+id).closest("tr").remove();
+        success: function (result) {
+            $("#id-" + id).closest("tr").remove();
             reloadCurrentPage();
         }
     });
 }
 
-function showMore(){
+function showMore() {
     $("#show-more").addClass("d-none");
     $("#show-less").removeClass("d-none");
 
-    $(".extra-info").each(function() {
+    $(".extra-info").each(function () {
         $(this).removeClass("d-none");
     });
 }
 
-function showLess(){
+function showLess() {
     $("#show-more").removeClass("d-none");
     $("#show-less").addClass("d-none");
 
-    $(".extra-info").each(function() {
+    $(".extra-info").each(function () {
         $(this).addClass("d-none");
     });
 }
 
-function updatePageNumber(num){
+function updatePageNumber(num) {
+    $("#previous-page").text(num - 1);
     $("#current-page").text(num);
+    $("#next-page").text(num + 1);
+    $("#last-page").text(totPages);
 }
 
-function checkPageButtons(pageNum){
+function checkPageButtons(pageNum) {
     noDisplay = "d-none";
 
-    switch(pageNum){
-      case 0:
-        $("#first-page").addClass(noDisplay);
-        $("#previous-page").addClass(noDisplay);
-  
-        $("#next-page").removeClass(noDisplay);
-        $("#last-page").removeClass(noDisplay);
-  
-        break;
-      case totPages-1:
-        $("#next-page").addClass(noDisplay);
-        $("#last-page").addClass(noDisplay);
-  
-        $("#first-page").removeClass(noDisplay);
-        $("#previous-page").removeClass(noDisplay);
-        break;
-      default:
-        $("#first-page").removeClass(noDisplay);
-        $("#previous-page").removeClass(noDisplay);
-        $("#next-page").removeClass(noDisplay);
-        $("#last-page").removeClass(noDisplay);
+    switch (pageNum) {
+        case 0:
+            $("#first-page").removeClass(noDisplay);
+            $("#previous-page").addClass(noDisplay);
+            $("#previous-page-arrow").addClass(noDisplay);
+
+            $("#next-page").removeClass(noDisplay);
+            $("#last-page").removeClass(noDisplay);
+
+            break;
+        case totPages-1:
+            $("#next-page").addClass(noDisplay);
+            $("#last-page").addClass(noDisplay);
+            $("#next-page-arrow").addClass(noDisplay);
+
+            $("#previous-page-arrow").removeClass(noDisplay);
+            $("#first-page").removeClass(noDisplay);
+            $("#previous-page").removeClass(noDisplay);
+            break;
+        default:
+            $("#next-page-arrow").removeClass(noDisplay);
+            $("#previous-page-arrow").removeClass(noDisplay);
+            $("#first-page").removeClass(noDisplay);
+            $("#previous-page").removeClass(noDisplay);
+            $("#next-page").removeClass(noDisplay);
+            $("#last-page").removeClass(noDisplay);
     }
 }

@@ -50,10 +50,12 @@
         <nav aria-label="Page navigation example" class="mt-5 mb-5 user-select-none">
             <ul class="pagination pagination-lg justify-content-center">
                 <li class="page-item page-link cursor-point" id="first-page" onclick="loadFirstPage()">First</li>
-                <li class="page-item page-link cursor-point" id="previous-page" onclick="loadPreviousPage()">&laquo;</li>
-                <li class="page-item page-link" id="current-page">1</li>
-                <li class="page-item page-link cursor-point" id="next-page" onclick="loadNextPage()">&raquo;</li>
-                <li class="page-item page-link cursor-point" id="last-page" onclick="loadLastPage()">Last</li>
+                <li class="page-item page-link cursor-point" id="previous-page-arrow" onclick="loadPreviousPage()">&laquo;</li>
+                <li class="page-item page-link cursor-point" id="previous-page" onclick="loadPreviousPage()">0</li>
+                <li class="page-item page-link border-primary border-3" id="current-page">1</li>
+                <li class="page-item page-link cursor-point" id="next-page" onclick="loadNextPage()">2 &raquo;</li>
+                <li class="page-item page-link cursor-point" id="next-page-arrow" onclick="loadNextPage()">&raquo;</li>
+                <li class="page-item page-link cursor-point" id="last-page" onclick="loadLastPage()">∞</li>
             </ul>
         </nav>
 
@@ -129,6 +131,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetModalInputs()">Reset</button>
                     <button type="button" class="btn btn-primary" onclick="saveEmployee()">Aggiungi</button>
                 </div>
             </div>
