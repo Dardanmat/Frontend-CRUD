@@ -2,7 +2,7 @@ $(window).on("load", function () {
     loadFirstPage();
 });
 
-var firstPage = "http://localhost:8080/employees";
+var firstPage = "http://localhost:8080/employees/index.php";
 var pageData;
 var data;
 var totPages;
@@ -38,10 +38,10 @@ function loadLastPage() {
 }
 
 var attributes = ["id",
-    "firstName",
-    "lastName", //<-- 2 
-    "birthDate",
-    "hireDate",
+    "first_name",
+    "last_name", //<-- 2 
+    "birth_date",
+    "hire_date",
     "gender"];
 function displayEmployees() {
     var rows = "";
@@ -130,10 +130,10 @@ function saveChanges(id) {
         }
     }
     let payload = {
-        "firstName": newAttributes[0],
-        "lastName": newAttributes[1],
-        "birthDate": newAttributes[2],
-        "hireDate": newAttributes[3],
+        "first_name": newAttributes[0],
+        "last_name": newAttributes[1],
+        "birth_date": newAttributes[2],
+        "hire_date": newAttributes[3],
         "gender": newAttributes[4]
     };
 
@@ -144,7 +144,7 @@ function changeEmployeeData(payload, id) {
 
     $.ajax({
         method: "PUT",
-        url: firstPage + "/" + id,
+        url: firstPage + "?id=" + id,
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify(payload),
@@ -202,15 +202,15 @@ function resetModalInputs() {
 
 function addEmployee(name, lastname, birthdate, hiredate, gender) {
     let payload = {
-        "firstName": name,
-        "lastName": lastname,
-        "birthDate": birthdate,
-        "hireDate": hiredate,
+        "first_name": name,
+        "last_name": lastname,
+        "birth_date": birthdate,
+        "hire_date": hiredate,
         "gender": gender
     }
     $.ajax({
         method: "POST",
-        url: "http://localhost:8080/employees",
+        url: "http://localhost:8080/employees/",
         dataType: "json",
         contentType: "application/json",
         data: JSON.stringify(payload),
@@ -220,7 +220,7 @@ function addEmployee(name, lastname, birthdate, hiredate, gender) {
 
 function reloadCurrentPage() {
     setTimeout(function () { //Il server impiega più tempo a salvare il nuovo utente che a rimandare la nuova pagina
-        $.get("http://localhost:8080/employees?page=" + pageData.page.number + "&size=20", function (values, status) {
+        $.get("http://localhost:8080/employees/?page=" + pageData.page.number + "&size=20", function (values, status) {
             defaultInstructions(values);
         });
     }, 50);
@@ -228,8 +228,15 @@ function reloadCurrentPage() {
 
 function deleteEmployee(id) {
     $.ajax({
-        url: firstPage + "/" + id,
+        url: firstPage + "?id=" + id,
         type: 'DELETE',
+        crossDomain: true,
+        "headers": {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*"
+        },
         success: function (result) {
             $("#id-" + id).closest("tr").remove();
             reloadCurrentPage();
